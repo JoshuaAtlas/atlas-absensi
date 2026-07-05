@@ -1,0 +1,1674 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<meta name="theme-color" content="#242B3B" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Atlas Absensi" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23242B3B'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='700' fill='%23C9A84C' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23242B3B'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' font-weight='700' fill='%23C9A84C' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E" />
+<title>Atlas Absensi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#F3EFE7;
+    --forest:#242B3B;
+    --forest-2:#2D3548;
+    --navy-deep:#1B2130;
+    --sand:#F3EFE7;
+    --sand-2:#E7E1D3;
+    --gold:#C9A84C;
+    --gold-2:#8A6D2F;
+    --sage:#3ECF8E;
+    --clay:#E05C5C;
+    --info:#5B8DEE;
+    --paper:#FBFAF7;
+    --line: rgba(36,43,59,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter', sans-serif;
+    background:var(--sand);
+    color:#20221E;
+    min-height:100vh;
+  }
+  .app{
+    max-width:480px;
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--paper);
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 0 40px rgba(27,58,52,0.08);
+  }
+  header.top{
+    background:var(--forest);
+    color:var(--sand);
+    padding:20px 20px 16px;
+    position:relative;
+    overflow:hidden;
+    min-height:106px;
+  }
+  header.top::after{
+    content:"";
+    position:absolute;
+    right:-40px; top:-60px;
+    width:160px; height:160px;
+    border-radius:50%;
+    border:1px solid rgba(241,233,216,0.15);
+  }
+  header.top::before{
+    content:"";
+    position:absolute;
+    right:-10px; top:-30px;
+    width:110px; height:110px;
+    border-radius:50%;
+    border:1px solid rgba(241,233,216,0.2);
+  }
+  .brand-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin:0 0 4px;
+  }
+  h1.brand{
+    font-family:'Playfair Display', serif;
+    font-weight:600;
+    font-size:26px;
+    margin:0;
+    position:relative;
+    z-index:1;
+  }
+  .gear-btn{
+    position:absolute;
+    top:20px; right:18px;
+    z-index:2;
+    width:34px; height:34px;
+    border-radius:50%;
+    background:rgba(243,239,231,0.08);
+    border:1px solid rgba(243,239,231,0.18);
+    color:rgba(243,239,231,0.6);
+    font-size:15px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .15s ease, color .15s ease;
+  }
+  .gear-btn:hover{ background:rgba(243,239,231,0.16); color:var(--sand); }
+  .lang-btn{
+    position:absolute;
+    top:62px; right:18px;
+    z-index:2;
+    height:26px;
+    padding:0 9px;
+    border-radius:13px;
+    background:rgba(243,239,231,0.08);
+    border:1px solid rgba(243,239,231,0.18);
+    color:rgba(243,239,231,0.75);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:0.04em;
+    cursor:pointer;
+    display:flex; align-items:center; gap:5px;
+    transition:background .15s ease, color .15s ease;
+    font-family:'Inter', sans-serif;
+  }
+  .lang-btn:hover{ background:rgba(243,239,231,0.16); color:var(--sand); }
+  .guest-card{
+    background:var(--sand-2);
+    border-left:3px solid var(--gold);
+    border-radius:8px;
+    padding:12px 14px;
+    margin:-4px 0 18px;
+  }
+  .guest-card-title{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--gold-2);
+    margin:0 0 6px;
+  }
+  .guest-card .row{
+    font-size:13.5px;
+    color:#20221E;
+    margin:2px 0;
+  }
+  .guest-card .row b{ font-weight:600; }
+  main{
+    flex:1;
+    padding:22px 20px 40px;
+  }
+  .view{ display:none; }
+  .view.active{ display:block; }
+  label{
+    display:block;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:rgba(32,34,30,0.55);
+    margin:0 0 6px;
+  }
+  select, input[type=text], input[type=number], input[type=password]{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-family:'Inter', sans-serif;
+    font-size:15px;
+    color:#20221E;
+    margin-bottom:16px;
+  }
+  select:focus, input:focus{
+    outline:2px solid var(--sage);
+    outline-offset:1px;
+  }
+  .radar-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:18px 0 8px;
+  }
+  .radar{
+    position:relative;
+    width:190px; height:190px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .radar .ring{
+    position:absolute;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+  }
+  .radar .ring.r1{ width:100%; height:100%; }
+  .radar .ring.r2{ width:70%; height:70%; }
+  .radar .ring.r3{ width:42%; height:42%; }
+  .radar.checking .ring{
+    animation: pulse 1.8s ease-out infinite;
+    border-color: var(--gold);
+  }
+  .radar.checking .ring.r2{ animation-delay:.3s; }
+  .radar.checking .ring.r3{ animation-delay:.6s; }
+  @keyframes pulse{
+    0%{ transform:scale(0.55); opacity:0.9; }
+    100%{ transform:scale(1.05); opacity:0; }
+  }
+  .radar.in .ring{ border-color: var(--sage); }
+  .radar.out .ring{ border-color: var(--clay); }
+  .radar-core{
+    position:relative; z-index:2;
+    width:42%; height:42%;
+    border-radius:50%;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:var(--forest);
+    color:var(--sand);
+    text-align:center;
+  }
+  .radar.in .radar-core{ background:var(--sage); color:#12241A; }
+  .radar.out .radar-core{ background:var(--clay); color:var(--sand); }
+  .radar-core .dist{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:15px;
+    font-weight:500;
+    line-height:1.1;
+  }
+  .radar-core .unit{
+    font-size:9px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    opacity:0.8;
+    margin-top:2px;
+  }
+  .status-line{
+    margin-top:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    text-align:center;
+    color:rgba(32,34,30,0.65);
+    min-height:16px;
+  }
+  .btn{
+    display:block;
+    width:100%;
+    padding:16px;
+    border-radius:12px;
+    border:none;
+    font-family:'Inter', sans-serif;
+    font-weight:700;
+    font-size:16px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .btn-in{ background:var(--gold); color:var(--navy-deep); }
+  .btn-in:active{ background:var(--gold-2); }
+  .btn-out{ background:var(--forest); color:var(--sand); }
+  .btn-disabled{ background:var(--sand-2); color:rgba(32,34,30,0.4); cursor:not-allowed; }
+  .btn-ghost{
+    background:transparent;
+    border:1px solid var(--line);
+    color:#20221E;
+    font-weight:600;
+    padding:12px;
+  }
+  .btn-small{ padding:10px; font-size:13px; border-radius:8px; }
+  .selfie-panel{
+    margin-top:16px;
+    padding:16px;
+    background:var(--sand-2);
+    border-radius:12px;
+    text-align:center;
+  }
+  .selfie-hint{
+    font-size:13px;
+    color:#20221E;
+    margin:0 0 12px;
+    font-weight:600;
+  }
+  .selfie-preview{
+    width:100%;
+    max-width:220px;
+    border-radius:10px;
+    margin:0 auto 12px;
+    display:block;
+    border:2px solid var(--gold);
+  }
+  .btn-link-skip{
+    display:block;
+    width:100%;
+    background:none;
+    border:none;
+    color:rgba(32,34,30,0.5);
+    font-size:12.5px;
+    text-decoration:underline;
+    margin-top:10px;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+  }
+  .thumb{
+    width:34px; height:34px;
+    border-radius:50%;
+    object-fit:cover;
+    margin-right:8px;
+    border:1px solid var(--line);
+    vertical-align:middle;
+  }
+  .history{
+    margin-top:22px;
+  }
+  .history h3{
+    font-family:'Playfair Display', serif;
+    font-size:15px;
+    font-weight:600;
+    margin:0 0 10px;
+  }
+  .hist-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+    font-size:13.5px;
+  }
+  .hist-row .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    padding:3px 7px;
+    border-radius:5px;
+    font-weight:500;
+  }
+  .tag-in{ background:rgba(62,207,142,0.18); color:#1E7A54; }
+  .tag-out{ background:rgba(27,58,52,0.1); color:var(--forest); }
+  .hist-empty{
+    color:rgba(32,34,30,0.45);
+    font-size:13.5px;
+    padding:14px 0;
+  }
+  section.panel{
+    margin-bottom:26px;
+    padding-bottom:22px;
+    border-bottom:1px solid var(--line);
+  }
+  section.panel:last-child{ border-bottom:none; }
+  section.panel h2{
+    font-family:'Playfair Display', serif;
+    font-size:17px;
+    font-weight:600;
+    margin:0 0 14px;
+  }
+  .row2{ display:flex; gap:10px; }
+  .row2 > *{ flex:1; }
+  .list-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 12px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-bottom:8px;
+    font-size:14px;
+  }
+  .list-item .meta{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:rgba(32,34,30,0.5);
+    margin-top:2px;
+  }
+  .list-item button.remove{
+    background:none; border:none; color:var(--clay);
+    font-size:13px; cursor:pointer; font-weight:600;
+  }
+  .add-form{
+    background:var(--sand);
+    border-radius:12px;
+    padding:14px;
+    margin-top:10px;
+  }
+  .hint{
+    font-size:12px;
+    color:rgba(32,34,30,0.5);
+    margin:10px 0 14px;
+    line-height:1.5;
+  }
+  .back-link{
+    display:inline-block;
+    background:none;
+    border:none;
+    color:var(--gold-2);
+    font-weight:600;
+    font-size:13.5px;
+    cursor:pointer;
+    padding:0 0 18px;
+    font-family:'Inter', sans-serif;
+  }
+  .pin-error{
+    font-size:12.5px;
+    color:var(--clay);
+    min-height:16px;
+    margin:2px 0 14px;
+    max-width:280px;
+  }
+  .lock-screen{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:40px 20px;
+    text-align:center;
+  }
+  .lock-screen input{ max-width:180px; text-align:center; letter-spacing:0.2em; }
+  .lock-screen p{ font-size:13px; color:rgba(32,34,30,0.55); max-width:280px; }
+  .cal-nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .cal-nav-btn{
+    width:32px; height:32px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--forest);
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .calendar-grid{
+    display:grid;
+    grid-template-columns:repeat(7, 1fr);
+    gap:3px;
+  }
+  .cal-dow{
+    text-align:center;
+    font-size:10px;
+    font-weight:700;
+    color:rgba(32,34,30,0.4);
+    padding-bottom:4px;
+    text-transform:uppercase;
+  }
+  .cal-day{
+    aspect-ratio:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    border-radius:6px;
+    font-size:11px;
+    color:#20221E;
+    background:var(--sand);
+    position:relative;
+    overflow:hidden;
+  }
+  .cal-day.empty{ background:transparent; }
+  .cal-day.today{ box-shadow:inset 0 0 0 2px var(--forest); font-weight:700; }
+  .cal-day.booked{
+    background:var(--gold);
+    color:var(--navy-deep);
+    font-weight:600;
+  }
+  .cal-day .guest-label{
+    font-size:7px;
+    line-height:1.1;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:95%;
+  }
+  .booking-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 12px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    margin-bottom:8px;
+    font-size:13px;
+  }
+  .booking-item .meta{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:rgba(32,34,30,0.5);
+    margin-top:2px;
+  }
+  .staff-cal-section{
+    margin-top:26px;
+    padding-top:22px;
+    border-top:1px solid var(--line);
+  }
+  .staff-cal-section h3{
+    font-family:'Playfair Display', serif;
+    font-size:15px;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .cal-hint{
+    font-size:12px;
+    color:rgba(32,34,30,0.5);
+    margin:0 0 14px;
+  }
+  .cal-day{ cursor:pointer; }
+  .cal-day.has-note::after{
+    content:"";
+    position:absolute;
+    bottom:3px; left:50%;
+    transform:translateX(-50%);
+    width:4px; height:4px;
+    border-radius:50%;
+    background:var(--clay);
+  }
+  .cal-day.selected{ box-shadow:inset 0 0 0 2px var(--gold-2); }
+  .cal-detail{
+    margin-top:12px;
+  }
+  .cal-detail-card{
+    background:var(--sand-2);
+    border-left:3px solid var(--gold);
+    border-radius:8px;
+    padding:12px 14px;
+  }
+  .cal-detail-card p{
+    font-size:13.5px;
+    margin:3px 0;
+    color:#20221E;
+  }
+  .cal-detail-card .cal-detail-date{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:rgba(32,34,30,0.5);
+    margin-bottom:6px;
+  }
+  .cal-detail-empty{
+    font-size:13px;
+    color:rgba(32,34,30,0.45);
+  }
+  .empty-note{
+    font-size:13px;
+    color:rgba(32,34,30,0.5);
+    background:var(--sand);
+    border-radius:10px;
+    padding:12px 14px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <p class="brand-eyebrow">Atlas Property</p>
+    <h1 class="brand" data-i18n="brandTitle">Absensi Staff</h1>
+    <button id="gearBtn" class="gear-btn" title="Admin" aria-label="Admin">⚙</button>
+    <button id="langBtn" class="lang-btn" title="Ganti Bahasa / Change Language" aria-label="Language">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+      <span id="langLabel">ID</span>
+    </button>
+  </header>
+
+  <main>
+    <!-- ABSEN VIEW -->
+    <div id="viewAbsen" class="view active">
+      <label for="selStaff" data-i18n="labelStaffName">Nama staff</label>
+      <select id="selStaff" class="staff-select"></select>
+
+      <label for="staffPinInput" data-i18n="labelYourPin">PIN pribadi kamu</label>
+      <input type="password" id="staffPinInput" placeholder="Masukkan PIN kamu" data-i18n-ph="phEnterYourPin" maxlength="6" />
+      <p class="pin-error" id="staffPinError"></p>
+
+      <label for="selSite" data-i18n="labelVillaLocation">Lokasi villa</label>
+      <select id="selSite" class="site-select"></select>
+
+      <div class="guest-card" id="guestCard" style="display:none;">
+        <p class="guest-card-title" data-i18n="guestCardTitle">Tamu hari ini</p>
+        <div id="guestCardBody"></div>
+      </div>
+
+      <div class="radar-wrap">
+        <div class="radar" id="radar">
+          <div class="ring r1"></div>
+          <div class="ring r2"></div>
+          <div class="ring r3"></div>
+          <div class="radar-core">
+            <div class="dist" id="radarDist">—</div>
+            <div class="unit" data-i18n="radarUnit">meter</div>
+          </div>
+        </div>
+        <div class="status-line" id="statusLine" data-i18n="statusDefault">Tekan tombol untuk cek lokasi</div>
+      </div>
+
+      <button class="btn btn-in" id="actionBtn" data-i18n="actionDefault">Cek Lokasi &amp; Absen</button>
+
+      <div class="selfie-panel" id="selfiePanel" style="display:none;">
+        <p class="selfie-hint" data-i18n="selfieHint">Dalam jangkauan. Ambil selfie untuk selesaikan absen.</p>
+        <img id="selfiePreview" class="selfie-preview" style="display:none;" />
+        <input type="file" id="selfieInput" accept="image/*" capture="user" style="display:none;" />
+        <button class="btn btn-in" id="selfieTakeBtn" data-i18n="selfieTake">📷 Ambil Selfie</button>
+        <button class="btn btn-ghost btn-small" id="selfieRetakeBtn" style="display:none;margin-top:8px;" data-i18n="selfieRetake">Ambil ulang</button>
+        <button class="btn btn-ghost btn-small" id="selfieConfirmBtn" style="display:none;margin-top:8px;" data-i18n="selfieConfirm">✓ Simpan Absen</button>
+        <button class="btn-link-skip" id="selfieSkipBtn" data-i18n="selfieSkip">Lewati tanpa foto</button>
+      </div>
+
+      <div class="history">
+        <h3 data-i18n="historyTitle">Riwayat terakhir</h3>
+        <div id="histList"></div>
+      </div>
+
+      <div class="staff-cal-section">
+        <h3 data-i18n="calVillaTitle">Kalender Villa</h3>
+        <p class="cal-hint" data-i18n="calHintStaff">Ketuk tanggal untuk lihat detail tamu & catatan.</p>
+        <div class="cal-nav">
+          <button class="cal-nav-btn" id="staffCalPrevBtn">‹</button>
+          <span id="staffCalMonthLabel"></span>
+          <button class="cal-nav-btn" id="staffCalNextBtn">›</button>
+        </div>
+        <div id="staffCalendarGrid" class="calendar-grid"></div>
+        <div id="staffCalDetail" class="cal-detail"></div>
+      </div>
+    </div>
+
+    <!-- ADMIN VIEW (locked) -->
+    <div id="viewAdminLock" class="view">
+      <button class="back-link" id="backFromLockBtn" data-i18n="backToAbsen">← Kembali ke Absen</button>
+      <div class="lock-screen">
+        <label for="pinInput" data-i18n="adminPinLabel">PIN Admin</label>
+        <input type="password" id="pinInput" placeholder="••••" maxlength="6" />
+        <button class="btn btn-in" style="max-width:180px;margin-top:6px;" id="pinSubmit" data-i18n="adminEnterBtn">Masuk</button>
+        <p id="pinError" class="pin-error"></p>
+      </div>
+    </div>
+
+    <div id="viewAdmin" class="view">
+      <button class="back-link" id="backFromAdminBtn" data-i18n="backToAbsen">← Kembali ke Absen</button>
+
+      <section class="panel">
+        <h2 data-i18n="secSecurity">Keamanan</h2>
+        <label for="newPin" data-i18n="labelChangePin">Ganti PIN Admin</label>
+        <input type="password" id="newPin" placeholder="PIN baru (4-6 digit)" data-i18n-ph="phNewPin" maxlength="6" />
+        <button class="btn btn-in" id="savePinBtn" data-i18n="btnSavePin">Simpan PIN Baru</button>
+        <p class="pin-error" id="newPinMsg"></p>
+        <p class="hint" data-i18n="hintPinSecurity">Ini pengaman ringan buat cegah staff iseng buka Admin — bukan keamanan tingkat tinggi.</p>
+      </section>
+
+      <section class="panel">
+        <h2 data-i18n="secCalendar">Kalender Tamu</h2>
+        <label data-i18n="labelVilla">Villa</label>
+        <select id="guestSiteSelect"></select>
+
+        <div class="cal-nav">
+          <button class="cal-nav-btn" id="calPrevBtn">‹</button>
+          <span id="calMonthLabel"></span>
+          <button class="cal-nav-btn" id="calNextBtn">›</button>
+        </div>
+        <div id="calendarGrid" class="calendar-grid"></div>
+        <p class="cal-hint" data-i18n="calHintAdmin">Ketuk tanggal untuk tambah/edit catatan hari itu.</p>
+        <div id="adminCalDetail" class="cal-detail"></div>
+
+        <div class="add-form" style="margin-top:16px;">
+          <label data-i18n="labelGuestName">Nama tamu</label>
+          <input type="text" id="bookingGuestName" placeholder="mis. Ami O'Connell" />
+          <div class="row2">
+            <div>
+              <label data-i18n="labelCheckIn">Check-in</label>
+              <input type="date" id="bookingCheckIn" />
+            </div>
+            <div>
+              <label data-i18n="labelCheckOut">Check-out</label>
+              <input type="date" id="bookingCheckOut" />
+            </div>
+          </div>
+          <label data-i18n="labelNotes">Catatan</label>
+          <input type="text" id="bookingNote" placeholder="mis. late checkout, extra towel" data-i18n-ph="phBookingNote" />
+          <button class="btn btn-in" id="addBookingBtn" data-i18n="btnAddBooking">+ Tambah Booking</button>
+          <p class="pin-error" id="bookingMsg"></p>
+        </div>
+
+        <div id="bookingList" style="margin-top:14px;"></div>
+      </section>
+
+      <section class="panel">
+        <h2 data-i18n="secVillaLocations">Lokasi villa</h2>
+        <div id="siteList"></div>
+        <div class="add-form">
+          <label data-i18n="labelVillaName">Nama villa</label>
+          <input type="text" id="newSiteName" placeholder="mis. Villa Tawa Tawa" />
+          <div class="row2">
+            <div>
+              <label data-i18n="labelLat">Latitude</label>
+              <input type="text" id="newSiteLat" placeholder="-8.xxxxxx" />
+            </div>
+            <div>
+              <label data-i18n="labelLng">Longitude</label>
+              <input type="text" id="newSiteLng" placeholder="115.xxxxxx" />
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-small" id="useMyLocBtn" style="margin-bottom:14px;" data-i18n="btnUseMyLoc">📍 Pakai lokasi saya sekarang</button>
+          <label data-i18n="labelRadius">Radius toleransi (meter)</label>
+          <input type="number" id="newSiteRadius" value="100" />
+          <button class="btn btn-in" id="addSiteBtn" data-i18n="btnAddVilla">Tambah villa</button>
+          <p class="pin-error" id="siteMsg"></p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 data-i18n="secStaffList">Daftar staff</h2>
+        <div id="staffList"></div>
+        <div id="resetPinPanel"></div>
+        <div class="add-form">
+          <label data-i18n="labelStaffNameAdmin">Nama staff</label>
+          <input type="text" id="newStaffName" placeholder="mis. Made Sudiarta" />
+          <label data-i18n="labelStaffPinAdmin">PIN pribadi staff (4 digit)</label>
+          <input type="password" id="newStaffPin" placeholder="mis. 4821" maxlength="6" />
+          <button class="btn btn-in" id="addStaffBtn" data-i18n="btnAddStaff">Tambah staff</button>
+          <p class="pin-error" id="staffMsg"></p>
+          <p class="hint" data-i18n="hintStaffPin">Kasih tau PIN ini langsung ke staffnya (jangan lewat grup WA bareng-bareng). Staff wajib masukkan PIN ini tiap mau absen.</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 data-i18n="secHistory">Riwayat absensi</h2>
+        <div class="filter-row" style="display:flex;gap:8px;margin-bottom:14px;">
+          <select id="filterStaff"><option value="" data-i18n="filterAllStaff">Semua staff</option></select>
+          <select id="filterSite"><option value="" data-i18n="filterAllVilla">Semua villa</option></select>
+        </div>
+        <div id="recordsTable"></div>
+        <button class="btn btn-ghost export-btn" id="exportBtn" style="margin-top:10px;" data-i18n="btnExportCsv">⬇ Export CSV</button>
+        <p class="hint" data-i18n="hintStorage">Karena tiap absen menyimpan foto, ruang penyimpanan bisa penuh lebih cepat. Export dulu secara berkala, baru hapus riwayat lama di bawah ini.</p>
+        <button class="btn btn-ghost btn-small" id="clearRecordsBtn" data-i18n="btnClearRecords">🗑 Hapus semua riwayat (setelah export)</button>
+        <div id="clearConfirmPanel"></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- Supabase Client Library -->
+<script async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+(async function(){
+  // ============================================
+  // SUPABASE INITIALIZATION
+  // ============================================
+  const SUPABASE_URL = import.meta.env?.VITE_SUPABASE_URL || 'https://ruliwiyfgqxkwuukl.supabase.co';
+  const SUPABASE_ANON_KEY = import.meta.env?.VITE_SUPABASE_ANON_KEY || 'sb_publishable_PxmWwYVnHNiz1RIyW4onZw_GwPnRjpy';
+  
+  // Wait for Supabase library to load
+  while (!window.supabase) { await new Promise(r => setTimeout(r, 100)); }
+  const { createClient } = window.supabase;
+  const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ============================================
+  // STATE
+  // ============================================
+  let adminPin = '1234';
+  let sites = [];
+  let staff = [];
+  let records = [];
+  let bookings = [];
+  let dayNotes = [];
+  const now = new Date();
+  let calYear = now.getFullYear();
+  let calMonth = now.getMonth();
+  let staffCalYear = now.getFullYear();
+  let staffCalMonth = now.getMonth();
+  const $ = (id) => document.getElementById(id);
+  let currentLang = 'id';
+
+  // ============================================
+  // I18N
+  // ============================================
+  const I18N = {
+    id: {
+      brandTitle:'Absensi Staff',
+      labelStaffName:'Nama staff', labelYourPin:'PIN pribadi kamu', phEnterYourPin:'Masukkan PIN kamu',
+      labelVillaLocation:'Lokasi villa', guestCardTitle:'Tamu hari ini', guestCardGuestLabel:'Tamu:', radarUnit:'meter',
+      statusDefault:'Tekan tombol untuk cek lokasi', actionDefault:'Cek Lokasi & Absen',
+      actionCheckIn:'Cek Lokasi & Absen Masuk', actionCheckOut:'Cek Lokasi & Absen Pulang',
+      selfieHint:'Dalam jangkauan. Ambil selfie untuk selesaikan absen.', selfieTake:'📷 Ambil Selfie',
+      selfieRetake:'Ambil ulang', selfieConfirm:'✓ Simpan Absen', selfieSkip:'Lewati tanpa foto',
+      historyTitle:'Riwayat terakhir', histEmpty:'Belum ada riwayat.',
+      calVillaTitle:'Kalender Villa', calHintStaff:'Ketuk tanggal untuk lihat detail tamu & catatan.',
+      calDetailEmpty:'Tidak ada info untuk tanggal ini.', calDetailCheckoutDay:'hari checkout (setelah {n} malam)',
+      calDetailNight:'malam ke-{x} dari {n}', calDetailGuestNote:'Catatan tamu:', calDetailAdminNote:'Catatan admin:',
+      backToAbsen:'← Kembali ke Absen', adminPinLabel:'PIN Admin', adminEnterBtn:'Masuk', adminPinWrong:'PIN salah, coba lagi.',
+      secSecurity:'Keamanan', labelChangePin:'Ganti PIN Admin', phNewPin:'PIN baru (4-6 digit)', btnSavePin:'Simpan PIN Baru',
+      hintPinSecurity:'Ini pengaman ringan buat cegah staff iseng buka Admin — bukan keamanan tingkat tinggi.',
+      msgPinTooShort:'PIN minimal 4 digit.', msgPinChanged:'PIN admin berhasil diganti.',
+      secCalendar:'Kalender Tamu', labelVilla:'Villa', calHintAdmin:'Ketuk tanggal untuk tambah/edit catatan hari itu.',
+      labelGuestName:'Nama tamu', labelCheckIn:'Check-in', labelCheckOut:'Check-out', labelNotes:'Catatan',
+      phBookingNote:'mis. late checkout, extra towel', btnAddBooking:'+ Tambah Booking',
+      msgSelectVilla:'Pilih villa dulu.', msgFillBooking:'Isi nama tamu, tanggal check-in, dan check-out.',
+      msgCheckoutAfterCheckin:'Tanggal check-out harus setelah check-in.', bookingEmpty:'Belum ada booking untuk villa ini.',
+      btnDelete:'Hapus', dayNotePlaceholder:'Tulis catatan untuk tanggal ini... (mis. minta cleaning, AC rusak)',
+      btnSaveNote:'Simpan Catatan', btnDeleteNote:'Hapus Catatan',
+      secVillaLocations:'Lokasi villa', labelVillaName:'Nama villa', labelLat:'Latitude', labelLng:'Longitude',
+      btnUseMyLoc:'📍 Pakai lokasi saya sekarang', gettingLoc:'Mengambil lokasi...', locFailed:'Gagal ambil lokasi',
+      labelRadius:'Radius toleransi (meter)', btnAddVilla:'Tambah villa', msgFillVilla:'Isi nama, latitude, dan longitude dulu.',
+      villaEmpty:'Belum ada villa. Tambahkan minimal satu supaya staff bisa absen.',
+      noStaffYet:'Belum ada staff — tambah lewat ⚙ Admin', noVillaYet:'Belum ada villa — tambah lewat ⚙ Admin', noVillaShort:'Belum ada villa',
+      secStaffList:'Daftar staff', labelStaffNameAdmin:'Nama staff', labelStaffPinAdmin:'PIN pribadi staff (4 digit)',
+      btnAddStaff:'Tambah staff', msgFillStaffName:'Isi nama staff dulu.', msgPinTooShortStaff:'PIN staff minimal 4 digit.',
+      hintStaffPin:'Kasih tau PIN ini langsung ke staffnya (jangan lewat grup WA bareng-bareng). Staff wajib masukkan PIN ini tiap mau absen.',
+      staffEmpty:'Belum ada staff terdaftar.', pinSetLabel:'PIN sudah diatur', pinNotSetLabel:'Belum ada PIN', btnResetPin:'Reset PIN',
+      resetPinTitle:'Reset PIN — {name}', btnCancel:'Batal',
+      secHistory:'Riwayat absensi', filterAllStaff:'Semua staff', filterAllVilla:'Semua villa',
+      recordsEmpty:'Belum ada data absensi.', btnExportCsv:'⬇ Export CSV',
+      hintStorage:'Karena tiap absen menyimpan foto, ruang penyimpanan bisa penuh lebih cepat. Export dulu secara berkala, baru hapus riwayat lama di bawah ini.',
+      btnClearRecords:'🗑 Hapus semua riwayat (setelah export)', clearConfirmMsg:'Yakin hapus SEMUA riwayat absensi? Pastikan sudah export CSV dulu — ini tidak bisa dibatalkan.',
+      btnClearYes:'Ya, Hapus Semua', tagIn:'MASUK', tagOut:'PULANG',
+      staffPinRequired:'Masukkan PIN kamu dulu.', staffPinWrong:'PIN salah.', pickStaffSite:'Pilih staff dan villa dulu.',
+      gettingGps:'Mengambil lokasi GPS...', inRange:'Dalam jangkauan ({d}m).', outRange:'Di luar jangkauan — {d}m dari {site} (batas {r}m). Absen ditolak.',
+      gpsUnsupported:'Browser tidak mendukung GPS.', savedIn:'Absen masuk tersimpan', savedOut:'Absen pulang tersimpan', withSelfie:' dengan selfie',
+      csvHeaders:['Staff','Villa','Tipe','Waktu','Jarak (m)'], csvIn:'Masuk', csvOut:'Pulang',
+      months:['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'],
+      dow:['Min','Sen','Sel','Rab','Kam','Jum','Sab'], locale:'id-ID',
+    },
+    en: {
+      brandTitle:'Staff Attendance',
+      labelStaffName:'Staff name', labelYourPin:'Your personal PIN', phEnterYourPin:'Enter your PIN',
+      labelVillaLocation:'Villa location', guestCardTitle:"Today's guest", guestCardGuestLabel:'Guest:', radarUnit:'meters',
+      statusDefault:'Tap the button to check location', actionDefault:'Check Location & Clock In/Out',
+      actionCheckIn:'Check Location & Clock In', actionCheckOut:'Check Location & Clock Out',
+      selfieHint:'In range. Take a selfie to complete check-in.', selfieTake:'📷 Take Selfie',
+      selfieRetake:'Retake', selfieConfirm:'✓ Save Attendance', selfieSkip:'Skip without photo',
+      historyTitle:'Recent history', histEmpty:'No history yet.',
+      calVillaTitle:'Villa Calendar', calHintStaff:'Tap a date to see guest details & notes.',
+      calDetailEmpty:'No info for this date.', calDetailCheckoutDay:'checkout day (after {n} nights)',
+      calDetailNight:'night {x} of {n}', calDetailGuestNote:'Guest note:', calDetailAdminNote:'Admin note:',
+      backToAbsen:'← Back to Attendance', adminPinLabel:'Admin PIN', adminEnterBtn:'Enter', adminPinWrong:'Wrong PIN, try again.',
+      secSecurity:'Security', labelChangePin:'Change Admin PIN', phNewPin:'New PIN (4-6 digits)', btnSavePin:'Save New PIN',
+      hintPinSecurity:'This is a light safeguard to stop staff from casually opening Admin — not high-level security.',
+      msgPinTooShort:'PIN must be at least 4 digits.', msgPinChanged:'Admin PIN changed successfully.',
+      secCalendar:'Guest Calendar', labelVilla:'Villa', calHintAdmin:'Tap a date to add/edit a note for that day.',
+      labelGuestName:'Guest name', labelCheckIn:'Check-in', labelCheckOut:'Check-out', labelNotes:'Notes',
+      phBookingNote:'e.g. late checkout, extra towel', btnAddBooking:'+ Add Booking',
+      msgSelectVilla:'Please select a villa first.', msgFillBooking:'Fill in guest name, check-in and check-out dates.',
+      msgCheckoutAfterCheckin:'Check-out date must be after check-in.', bookingEmpty:'No bookings yet for this villa.',
+      btnDelete:'Delete', dayNotePlaceholder:'Write a note for this date... (e.g. needs cleaning, AC broken)',
+      btnSaveNote:'Save Note', btnDeleteNote:'Delete Note',
+      secVillaLocations:'Villa locations', labelVillaName:'Villa name', labelLat:'Latitude', labelLng:'Longitude',
+      btnUseMyLoc:'📍 Use my location now', gettingLoc:'Getting location...', locFailed:'Failed to get location',
+      labelRadius:'Tolerance radius (meters)', btnAddVilla:'Add villa', msgFillVilla:'Fill in name, latitude, and longitude first.',
+      villaEmpty:'No villas yet. Add at least one so staff can check in.',
+      noStaffYet:'No staff yet — add via ⚙ Admin', noVillaYet:'No villas yet — add via ⚙ Admin', noVillaShort:'No villas yet',
+      secStaffList:'Staff list', labelStaffNameAdmin:'Staff name', labelStaffPinAdmin:'Staff personal PIN (4 digits)',
+      btnAddStaff:'Add staff', msgFillStaffName:'Fill in staff name first.', msgPinTooShortStaff:'Staff PIN must be at least 4 digits.',
+      hintStaffPin:"Give this PIN directly to the staff member (not in a shared WhatsApp group). Staff must enter this PIN every time they check in.",
+      staffEmpty:'No staff registered yet.', pinSetLabel:'PIN is set', pinNotSetLabel:'No PIN yet', btnResetPin:'Reset PIN',
+      resetPinTitle:'Reset PIN — {name}', btnCancel:'Cancel',
+      secHistory:'Attendance history', filterAllStaff:'All staff', filterAllVilla:'All villas',
+      recordsEmpty:'No attendance data yet.', btnExportCsv:'⬇ Export CSV',
+      hintStorage:'Since every check-in stores a photo, storage can fill up faster. Export regularly, then clear old history below.',
+      btnClearRecords:'🗑 Clear all history (after exporting)', clearConfirmMsg:'Are you sure you want to delete ALL attendance history? Make sure you have exported the CSV first — this cannot be undone.',
+      btnClearYes:'Yes, Delete All', tagIn:'IN', tagOut:'OUT',
+      staffPinRequired:'Please enter your PIN first.', staffPinWrong:'Wrong PIN.', pickStaffSite:'Please select staff and villa first.',
+      gettingGps:'Getting GPS location...', inRange:'In range ({d}m).', outRange:'Out of range — {d}m from {site} (limit {r}m). Attendance rejected.',
+      gpsUnsupported:'Browser does not support GPS.', savedIn:'Check-in saved', savedOut:'Check-out saved', withSelfie:' with selfie',
+      csvHeaders:['Staff','Villa','Type','Time','Distance (m)'], csvIn:'In', csvOut:'Out',
+      months:['January','February','March','April','May','June','July','August','September','October','November','December'],
+      dow:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], locale:'en-US',
+    }
+  };
+
+  function t(key){ return (I18N[currentLang] && I18N[currentLang][key]) || I18N.id[key] || key; }
+  function tf(key, params){
+    let s = t(key);
+    for(const k in params){ s = s.replace(`{${k}}`, params[k]); }
+    return s;
+  }
+
+  function applyLanguage(){
+    document.documentElement.lang = currentLang;
+    $('langLabel').textContent = currentLang.toUpperCase();
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+    fillSelects();
+    renderHistory();
+    updateActionButtonLabel();
+    renderGuestCard();
+    renderStaffCalendar();
+    if(document.getElementById('viewAdmin').classList.contains('active')){
+      renderAdminAll();
+    }
+  }
+
+  $('langBtn').addEventListener('click', () => {
+    currentLang = currentLang === 'id' ? 'en' : 'id';
+    localStorage.setItem('atlas-lang', currentLang);
+    applyLanguage();
+  });
+
+  // ============================================
+  // LOAD DATA FROM SUPABASE
+  // ============================================
+  async function loadAll(){
+    try{
+      // Load admin settings
+      const { data: adminData } = await sb.from('admin_settings').select('admin_pin').eq('id', 1).single();
+      if(adminData) adminPin = adminData.admin_pin;
+    }catch(e){ console.error('Error loading admin:', e); }
+
+    try{
+      const { data: sitesData } = await sb.from('sites').select('*');
+      sites = (sitesData || []).map(s => ({ id: s.id, name: s.name, lat: String(s.lat), lng: String(s.lng), radius: String(s.radius) }));
+    }catch(e){ console.error('Error loading sites:', e); }
+
+    try{
+      const { data: staffData } = await sb.from('staff').select('*');
+      staff = (staffData || []).map(s => ({ id: s.id, name: s.name, pin: s.pin }));
+    }catch(e){ console.error('Error loading staff:', e); }
+
+    try{
+      const { data: bookingData } = await sb.from('bookings').select('*');
+      bookings = (bookingData || []).map(b => ({ id: b.id, siteId: b.site_id, guestName: b.guest_name, checkIn: b.check_in, checkOut: b.check_out, note: b.note }));
+    }catch(e){ console.error('Error loading bookings:', e); }
+
+    try{
+      const { data: notesData } = await sb.from('day_notes').select('*');
+      dayNotes = (notesData || []).map(n => ({ id: n.id, siteId: n.site_id, date: n.date, note: n.note }));
+    }catch(e){ console.error('Error loading day notes:', e); }
+
+    try{
+      const { data: recordsData } = await sb.from('attendance_records').select('*').order('ts', {ascending:false});
+      records = (recordsData || []).map(r => ({ 
+        id: r.id, staffId: r.staff_id, siteId: r.site_id, type: r.type, ts: r.ts,
+        lat: r.lat, lng: r.lng, distance: r.distance, photo_path: r.photo_path
+      }));
+    }catch(e){ console.error('Error loading records:', e); }
+  }
+
+  async function saveAdminPin(){
+    try{
+      await sb.from('admin_settings').update({admin_pin: adminPin}).eq('id', 1);
+    }catch(e){ console.error('Error saving admin pin:', e); }
+  }
+
+  async function saveSite(site){
+    try{
+      await sb.from('sites').insert([{
+        id: site.id, name: site.name, lat: parseFloat(site.lat), lng: parseFloat(site.lng), radius: parseFloat(site.radius)
+      }]);
+    }catch(e){ console.error('Error saving site:', e); }
+  }
+
+  async function deleteSite(id){
+    try{
+      await sb.from('sites').delete().eq('id', id);
+    }catch(e){ console.error('Error deleting site:', e); }
+  }
+
+  async function saveStaff(s){
+    try{
+      await sb.from('staff').insert([{id: s.id, name: s.name, pin: s.pin}]);
+    }catch(e){ console.error('Error saving staff:', e); }
+  }
+
+  async function updateStaff(s){
+    try{
+      await sb.from('staff').update({name: s.name, pin: s.pin}).eq('id', s.id);
+    }catch(e){ console.error('Error updating staff:', e); }
+  }
+
+  async function deleteStaff(id){
+    try{
+      await sb.from('staff').delete().eq('id', id);
+    }catch(e){ console.error('Error deleting staff:', e); }
+  }
+
+  async function saveBooking(b){
+    try{
+      await sb.from('bookings').insert([{
+        id: b.id, site_id: b.siteId, guest_name: b.guestName, check_in: b.checkIn, check_out: b.checkOut, note: b.note
+      }]);
+    }catch(e){ console.error('Error saving booking:', e); }
+  }
+
+  async function deleteBooking(id){
+    try{
+      await sb.from('bookings').delete().eq('id', id);
+    }catch(e){ console.error('Error deleting booking:', e); }
+  }
+
+  async function saveDayNote(n){
+    try{
+      await sb.from('day_notes').upsert({
+        id: n.id, site_id: n.siteId, date: n.date, note: n.note
+      });
+    }catch(e){ console.error('Error saving day note:', e); }
+  }
+
+  async function deleteDayNote(id){
+    try{
+      await sb.from('day_notes').delete().eq('id', id);
+    }catch(e){ console.error('Error deleting day note:', e); }
+  }
+
+  async function saveRecord(rec, photoBlob){
+    try{
+      let photoPath = null;
+      if(photoBlob){
+        const fileName = `${rec.id}.jpg`;
+        const { error } = await sb.storage.from('selfie-absensi').upload(fileName, photoBlob);
+        if(!error) photoPath = fileName;
+      }
+      await sb.from('attendance_records').insert([{
+        id: rec.id, staff_id: rec.staffId, site_id: rec.siteId, type: rec.type, ts: rec.ts,
+        lat: rec.lat, lng: rec.lng, distance: rec.distance, photo_path: photoPath
+      }]);
+    }catch(e){ console.error('Error saving record:', e); }
+  }
+
+  async function deleteAllRecords(){
+    try{
+      await sb.from('attendance_records').delete().neq('id', '');
+    }catch(e){ console.error('Error deleting all records:', e); }
+  }
+
+  // ============================================
+  // UTILITY FUNCTIONS
+  // ============================================
+  function haversine(lat1, lon1, lat2, lon2){
+    const R = 6371000;
+    const toRad = d => d * Math.PI/180;
+    const dLat = toRad(lat2-lat1);
+    const dLon = toRad(lon2-lon1);
+    const a = Math.sin(dLat/2)**2 + Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+    return R * 2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  }
+
+  function fillSelects(){
+    const selStaff = $('selStaff');
+    const selSite = $('selSite');
+    const filterStaff = $('filterStaff');
+    const filterSite = $('filterSite');
+    const guestSiteSelect = $('guestSiteSelect');
+
+    selStaff.innerHTML = staff.length
+      ? staff.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')
+      : `<option value="">${t('noStaffYet')}</option>`;
+
+    selSite.innerHTML = sites.length
+      ? sites.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')
+      : `<option value="">${t('noVillaYet')}</option>`;
+
+    filterStaff.innerHTML = `<option value="">${t('filterAllStaff')}</option>` +
+      staff.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('');
+    filterSite.innerHTML = `<option value="">${t('filterAllVilla')}</option>` +
+      sites.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('');
+
+    if(guestSiteSelect){
+      guestSiteSelect.innerHTML = sites.length
+        ? sites.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')
+        : `<option value="">${t('noVillaShort')}</option>`;
+    }
+  }
+
+  function escapeHtml(str){
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function lastRecordFor(staffId){
+    const filtered = records.filter(r => r.staffId === staffId).sort((a,b)=> b.ts - a.ts);
+    return filtered[0] || null;
+  }
+
+  function renderHistory(){
+    const staffId = $('selStaff').value;
+    const list = $('histList');
+    const mine = records.filter(r => r.staffId === staffId).sort((a,b)=> b.ts - a.ts).slice(0,5);
+    if(!mine.length){ list.innerHTML = `<div class="hist-empty">${t('histEmpty')}</div>`; return; }
+    list.innerHTML = mine.map(r => {
+      const site = sites.find(s => s.id === r.siteId);
+      const d = new Date(r.ts);
+      const tagClass = r.type === 'in' ? 'tag-in' : 'tag-out';
+      const label = r.type === 'in' ? t('tagIn') : t('tagOut');
+      let thumb = '';
+      if(r.photo_path){
+        try{
+          const { data } = sb.storage.from('selfie-absensi').getPublicUrl(r.photo_path);
+          thumb = `<img src="${data.publicUrl}" class="thumb" />`;
+        }catch(e){}
+      }
+      return `<div class="hist-row">
+        <span>${thumb}${site ? escapeHtml(site.name) : '—'}<br><span style="color:rgba(32,34,30,0.45);font-size:12px;">${d.toLocaleString(t('locale'),{dateStyle:'medium',timeStyle:'short'})}</span></span>
+        <span class="tag ${tagClass}">${label}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function updateActionButtonLabel(){
+    const staffId = $('selStaff').value;
+    const btn = $('actionBtn');
+    if(!staffId || !sites.length){ btn.textContent = t('actionDefault'); return; }
+    const last = lastRecordFor(staffId);
+    const nextIsIn = !last || last.type === 'out';
+    btn.textContent = nextIsIn ? t('actionCheckIn') : t('actionCheckOut');
+    btn.className = 'btn ' + (nextIsIn ? 'btn-in' : 'btn-out');
+  }
+
+  function setRadarState(state, distance){
+    const radar = $('radar');
+    radar.classList.remove('checking','in','out');
+    if(state) radar.classList.add(state);
+    $('radarDist').textContent = (distance===null||distance===undefined) ? '—' : Math.round(distance);
+  }
+
+  let pendingRecord = null;
+  let pendingPhoto = null;
+
+  $('selStaff').addEventListener('change', ()=>{ renderHistory(); updateActionButtonLabel(); $('staffPinInput').value=''; $('staffPinError').textContent=''; });
+  $('selSite').addEventListener('change', ()=>{ setRadarState('', null); $('statusLine').textContent = t('statusDefault'); renderGuestCard(); renderStaffCalendar(); });
+
+  $('actionBtn').addEventListener('click', () => {
+    const staffId = $('selStaff').value;
+    const siteId = $('selSite').value;
+    if(!staffId || !siteId){ $('statusLine').textContent = t('pickStaffSite'); return; }
+
+    const staffObj = staff.find(s => s.id === staffId);
+    const enteredPin = $('staffPinInput').value.trim();
+    if(staffObj && staffObj.pin){
+      if(!enteredPin){ $('staffPinError').textContent = t('staffPinRequired'); return; }
+      if(enteredPin !== staffObj.pin){ $('staffPinError').textContent = t('staffPinWrong'); $('staffPinInput').value=''; return; }
+    }
+    $('staffPinError').textContent = '';
+
+    if(!navigator.geolocation){ $('statusLine').textContent = t('gpsUnsupported'); return; }
+
+    setRadarState('checking', null);
+    $('statusLine').textContent = t('gettingGps');
+    $('actionBtn').disabled = true;
+
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const site = sites.find(s => s.id === siteId);
+      const dist = haversine(pos.coords.latitude, pos.coords.longitude, parseFloat(site.lat), parseFloat(site.lng));
+      const within = dist <= parseFloat(site.radius);
+
+      setRadarState(within ? 'in' : 'out', dist);
+      $('actionBtn').disabled = false;
+
+      if(within){
+        const last = lastRecordFor(staffId);
+        const type = (!last || last.type === 'out') ? 'in' : 'out';
+        pendingRecord = {
+          id: 'r'+Date.now(),
+          staffId, siteId, type,
+          ts: Date.now(),
+          lat: pos.coords.latitude, lng: pos.coords.longitude,
+          distance: Math.round(dist)
+        };
+        $('statusLine').textContent = tf('inRange', {d: Math.round(dist)});
+        $('actionBtn').style.display = 'none';
+        $('selfiePanel').style.display = 'block';
+        resetSelfieUI();
+      } else {
+        $('statusLine').textContent = tf('outRange', {d: Math.round(dist), site: site.name, r: site.radius});
+      }
+    }, (err) => {
+      setRadarState('out', null);
+      $('statusLine').textContent = t('locFailed') + ': ' + (err.message || '');
+      $('actionBtn').disabled = false;
+    }, { enableHighAccuracy:true, timeout:15000, maximumAge:0 });
+  });
+
+  function resetSelfieUI(){
+    pendingPhoto = null;
+    $('selfiePreview').style.display = 'none';
+    $('selfiePreview').src = '';
+    $('selfieTakeBtn').style.display = 'block';
+    $('selfieRetakeBtn').style.display = 'none';
+    $('selfieConfirmBtn').style.display = 'none';
+    $('selfieInput').value = '';
+  }
+
+  $('selfieTakeBtn').addEventListener('click', () => $('selfieInput').click());
+
+  $('selfieInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        const maxDim = 160;
+        let w = img.width, h = img.height;
+        if(w > h){ h = Math.round(h * maxDim/w); w = maxDim; } else { w = Math.round(w * maxDim/h); h = maxDim; }
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        pendingPhoto = canvas.toDataURL('image/jpeg', 0.5);
+        $('selfiePreview').src = pendingPhoto;
+        $('selfiePreview').style.display = 'block';
+        $('selfieTakeBtn').style.display = 'none';
+        $('selfieRetakeBtn').style.display = 'block';
+        $('selfieConfirmBtn').style.display = 'block';
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  $('selfieRetakeBtn').addEventListener('click', resetSelfieUI);
+  $('selfieConfirmBtn').addEventListener('click', () => finalizeCheckin(pendingPhoto));
+  $('selfieSkipBtn').addEventListener('click', () => finalizeCheckin(null));
+
+  async function finalizeCheckin(photoDataUrl){
+    if(!pendingRecord) return;
+    let photoBlob = null;
+    if(photoDataUrl){
+      const response = await fetch(photoDataUrl);
+      photoBlob = await response.blob();
+    }
+    await saveRecord(pendingRecord, photoBlob);
+    records.push(pendingRecord);
+    const base = pendingRecord.type==='in' ? t('savedIn') : t('savedOut');
+    $('statusLine').textContent = base + (photoBlob ? t('withSelfie') : '') + '.';
+    $('selfiePanel').style.display = 'none';
+    $('actionBtn').style.display = 'block';
+    $('staffPinInput').value = '';
+    pendingRecord = null;
+    renderHistory();
+    updateActionButtonLabel();
+    renderAdminRecords();
+  }
+
+  // Admin access
+  $('gearBtn').addEventListener('click', () => {
+    $('pinInput').value = '';
+    $('pinError').textContent = '';
+    switchTab('adminGate');
+  });
+  $('backFromLockBtn').addEventListener('click', () => switchTab('absen'));
+  $('backFromAdminBtn').addEventListener('click', () => {
+    switchTab('absen');
+    fillSelects();
+    renderGuestCard();
+    renderStaffCalendar();
+    updateActionButtonLabel();
+  });
+
+  function switchTab(which){
+    $('viewAbsen').classList.toggle('active', which==='absen');
+    $('viewAdminLock').classList.toggle('active', which==='adminGate');
+    $('viewAdmin').classList.toggle('active', which==='admin');
+  }
+
+  $('pinSubmit').addEventListener('click', () => {
+    if($('pinInput').value === adminPin){
+      switchTab('admin');
+      renderAdminAll();
+    } else {
+      $('pinInput').value = '';
+      $('pinError').textContent = t('adminPinWrong');
+    }
+  });
+  $('pinInput').addEventListener('keydown', (e) => { if(e.key === 'Enter'){ $('pinSubmit').click(); } });
+
+  $('savePinBtn').addEventListener('click', async () => {
+    const val = $('newPin').value.trim();
+    const msg = $('newPinMsg');
+    if(val.length < 4){ msg.style.color = 'var(--clay)'; msg.textContent = t('msgPinTooShort'); return; }
+    adminPin = val;
+    await saveAdminPin();
+    $('newPin').value = '';
+    msg.style.color = 'var(--sage)';
+    msg.textContent = t('msgPinChanged');
+    setTimeout(() => { msg.textContent=''; }, 3000);
+  });
+
+  // Calendar functions
+  function dateStr(d){ return d.toISOString().slice(0,10); }
+  function todayStr(){ return dateStr(new Date()); }
+
+  $('addBookingBtn').addEventListener('click', async () => {
+    const siteId = $('guestSiteSelect').value;
+    const guestName = $('bookingGuestName').value.trim();
+    const checkIn = $('bookingCheckIn').value;
+    const checkOut = $('bookingCheckOut').value;
+    const note = $('bookingNote').value.trim();
+    const msg = $('bookingMsg');
+    if(!siteId){ msg.textContent = t('msgSelectVilla'); return; }
+    if(!guestName || !checkIn || !checkOut){ msg.textContent = t('msgFillBooking'); return; }
+    if(checkOut < checkIn){ msg.textContent = t('msgCheckoutAfterCheckin'); return; }
+    msg.textContent = '';
+    const booking = { id:'b'+Date.now(), siteId, guestName, checkIn, checkOut, note };
+    bookings.push(booking);
+    await saveBooking(booking);
+    $('bookingGuestName').value = ''; $('bookingCheckIn').value=''; $('bookingCheckOut').value=''; $('bookingNote').value='';
+    renderCalendar();
+    renderBookingList();
+    renderGuestCard();
+  });
+
+  $('calPrevBtn').addEventListener('click', () => {
+    calMonth--; if(calMonth < 0){ calMonth = 11; calYear--; }
+    renderCalendar();
+  });
+  $('calNextBtn').addEventListener('click', () => {
+    calMonth++; if(calMonth > 11){ calMonth = 0; calYear++; }
+    renderCalendar();
+  });
+
+  function buildCalendarHTML(siteId, year, month){
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month+1, 0).getDate();
+    const siteBookings = bookings.filter(b => b.siteId === siteId);
+    const today = todayStr();
+
+    let html = t('dow').map(d => `<div class="cal-dow">${d}</div>`).join('');
+    for(let i=0;i<firstDay;i++){ html += `<div class="cal-day empty"></div>`; }
+    for(let day=1; day<=daysInMonth; day++){
+      const ds = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      const booking = siteBookings.find(b => ds >= b.checkIn && ds <= b.checkOut);
+      const hasNote = dayNotes.some(n => n.siteId === siteId && n.date === ds);
+      const isToday = ds === today;
+      let cls = 'cal-day' + (booking ? ' booked' : '') + (isToday ? ' today' : '') + (hasNote ? ' has-note' : '');
+      let label = '';
+      if(booking && (ds === booking.checkIn || day === 1)){
+        label = `<span class="guest-label">${escapeHtml(booking.guestName.split(' ')[0])}</span>`;
+      }
+      html += `<div class="${cls}" data-date="${ds}">${day}${label}</div>`;
+    }
+    return html;
+  }
+
+  function renderCalendar(){
+    const siteId = $('guestSiteSelect').value;
+    $('calMonthLabel').textContent = `${t('months')[calMonth]} ${calYear}`;
+    const grid = $('calendarGrid');
+    grid.innerHTML = buildCalendarHTML(siteId, calYear, calMonth);
+    grid.querySelectorAll('.cal-day[data-date]').forEach(cell => {
+      cell.addEventListener('click', () => {
+        grid.querySelectorAll('.cal-day.selected').forEach(c => c.classList.remove('selected'));
+        cell.classList.add('selected');
+        renderAdminDayEditor(siteId, cell.dataset.date);
+      });
+    });
+  }
+
+  function renderAdminDayEditor(siteId, ds){
+    const existing = dayNotes.find(n => n.siteId === siteId && n.date === ds);
+    const el = $('adminCalDetail');
+    el.innerHTML = `
+      <div class="cal-detail-card">
+        <p class="cal-detail-date">${ds}</p>
+        <textarea id="dayNoteInput" rows="2" placeholder="${t('dayNotePlaceholder')}" style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--line);font-family:'Inter',sans-serif;font-size:14px;resize:vertical;margin-bottom:10px;">${existing ? escapeHtml(existing.note) : ''}</textarea>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-in btn-small" id="saveDayNoteBtn" style="flex:1;">${t('btnSaveNote')}</button>
+          ${existing ? `<button class="btn btn-ghost btn-small" id="deleteDayNoteBtn" style="flex:1;">${t('btnDeleteNote')}</button>` : ''}
+        </div>
+      </div>`;
+    $('saveDayNoteBtn').addEventListener('click', async () => {
+      const val = $('dayNoteInput').value.trim();
+      if(!val){ el.querySelector('#dayNoteInput').focus(); return; }
+      if(existing){ 
+        existing.note = val;
+        await saveDayNote(existing);
+      }
+      else { 
+        const n = { id:'n'+Date.now(), siteId, date: ds, note: val };
+        dayNotes.push(n);
+        await saveDayNote(n);
+      }
+      renderCalendar();
+      renderAdminDayEditor(siteId, ds);
+    });
+    const delBtn = $('deleteDayNoteBtn');
+    if(delBtn){
+      delBtn.addEventListener('click', async () => {
+        await deleteDayNote(existing.id);
+        dayNotes = dayNotes.filter(n => n !== existing);
+        renderCalendar();
+        el.innerHTML = '';
+      });
+    }
+  }
+
+  function renderStaffCalendar(){
+    const siteId = $('selSite').value;
+    if(!siteId){ $('staffCalMonthLabel').textContent = '—'; $('staffCalendarGrid').innerHTML=''; $('staffCalDetail').innerHTML=''; return; }
+    $('staffCalMonthLabel').textContent = `${t('months')[staffCalMonth]} ${staffCalYear}`;
+    const grid = $('staffCalendarGrid');
+    grid.innerHTML = buildCalendarHTML(siteId, staffCalYear, staffCalMonth);
+    grid.querySelectorAll('.cal-day[data-date]').forEach(cell => {
+      cell.addEventListener('click', () => {
+        grid.querySelectorAll('.cal-day.selected').forEach(c => c.classList.remove('selected'));
+        cell.classList.add('selected');
+        showStaffDayDetail(siteId, cell.dataset.date);
+      });
+    });
+    $('staffCalDetail').innerHTML = '';
+  }
+
+  function showStaffDayDetail(siteId, ds){
+    const booking = bookings.find(b => b.siteId === siteId && ds >= b.checkIn && ds <= b.checkOut);
+    const note = dayNotes.find(n => n.siteId === siteId && n.date === ds);
+    const el = $('staffCalDetail');
+    if(!booking && !note){
+      el.innerHTML = `<div class="cal-detail-card"><p class="cal-detail-date">${ds}</p><p class="cal-detail-empty">${t('calDetailEmpty')}</p></div>`;
+      return;
+    }
+    let html = `<div class="cal-detail-card"><p class="cal-detail-date">${ds}</p>`;
+    if(booking){
+      const oneDay = 24*60*60*1000;
+      const totalNights = Math.round((new Date(booking.checkOut) - new Date(booking.checkIn)) / oneDay);
+      if(ds === booking.checkOut){
+        html += `<p><b>${escapeHtml(booking.guestName)}</b> — ${tf('calDetailCheckoutDay', {n: totalNights})}</p>`;
+      } else {
+        const nightNo = Math.round((new Date(ds) - new Date(booking.checkIn)) / oneDay) + 1;
+        html += `<p><b>${escapeHtml(booking.guestName)}</b> — ${tf('calDetailNight', {x: nightNo, n: totalNights})}</p>`;
+      }
+      if(booking.note) html += `<p>${t('calDetailGuestNote')} ${escapeHtml(booking.note)}</p>`;
+    }
+    if(note) html += `<p><b>${t('calDetailAdminNote')}</b> ${escapeHtml(note.note)}</p>`;
+    html += `</div>`;
+    el.innerHTML = html;
+  }
+
+  $('staffCalPrevBtn').addEventListener('click', () => {
+    staffCalMonth--; if(staffCalMonth < 0){ staffCalMonth = 11; staffCalYear--; }
+    renderStaffCalendar();
+  });
+  $('staffCalNextBtn').addEventListener('click', () => {
+    staffCalMonth++; if(staffCalMonth > 11){ staffCalMonth = 0; staffCalYear++; }
+    renderStaffCalendar();
+  });
+
+  function renderBookingList(){
+    const siteId = $('guestSiteSelect').value;
+    const el = $('bookingList');
+    const list = bookings.filter(b => b.siteId === siteId).sort((a,b)=> a.checkIn.localeCompare(b.checkIn));
+    if(!list.length){ el.innerHTML = `<div class="empty-note">${t('bookingEmpty')}</div>`; return; }
+    el.innerHTML = list.map(b => `
+      <div class="booking-item">
+        <div>
+          <div>${escapeHtml(b.guestName)}</div>
+          <div class="meta">${b.checkIn} → ${b.checkOut}${b.note ? ' · '+escapeHtml(b.note) : ''}</div>
+        </div>
+        <button class="remove" data-booking="${b.id}">${t('btnDelete')}</button>
+      </div>`).join('');
+    el.querySelectorAll('button[data-booking]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        await deleteBooking(btn.dataset.booking);
+        bookings = bookings.filter(b => b.id !== btn.dataset.booking);
+        renderCalendar(); renderBookingList(); renderGuestCard(); renderStaffCalendar();
+      });
+    });
+  }
+
+  function renderGuestCard(){
+    const siteId = $('selSite').value;
+    const card = $('guestCard');
+    const body = $('guestCardBody');
+    const today = todayStr();
+    const active = bookings.find(b => b.siteId === siteId && today >= b.checkIn && today <= b.checkOut);
+    if(!active){ card.style.display = 'none'; return; }
+    card.style.display = 'block';
+    let html = `<p class="row"><b>${t('guestCardGuestLabel')}</b> ${escapeHtml(active.guestName)}</p>`;
+    html += `<p class="row"><b>${t('labelCheckOut')}:</b> ${active.checkOut}</p>`;
+    if(active.note) html += `<p class="row"><b>${t('labelNotes')}:</b> ${escapeHtml(active.note)}</p>`;
+    body.innerHTML = html;
+  }
+
+  // Admin sites
+  $('useMyLocBtn').addEventListener('click', () => {
+    if(!navigator.geolocation){ return; }
+    $('useMyLocBtn').textContent = t('gettingLoc');
+    navigator.geolocation.getCurrentPosition((pos)=>{
+      $('newSiteLat').value = pos.coords.latitude.toFixed(6);
+      $('newSiteLng').value = pos.coords.longitude.toFixed(6);
+      $('useMyLocBtn').textContent = t('btnUseMyLoc');
+    }, ()=>{ $('useMyLocBtn').textContent = t('locFailed'); }, {enableHighAccuracy:true});
+  });
+
+  $('addSiteBtn').addEventListener('click', async () => {
+    const name = $('newSiteName').value.trim();
+    const lat = $('newSiteLat').value.trim();
+    const lng = $('newSiteLng').value.trim();
+    const radius = $('newSiteRadius').value.trim() || '100';
+    const msg = $('siteMsg');
+    if(!name || !lat || !lng){ msg.textContent = t('msgFillVilla'); return; }
+    msg.textContent = '';
+    const site = { id:'s'+Date.now(), name, lat, lng, radius };
+    sites.push(site);
+    await saveSite(site);
+    $('newSiteName').value=''; $('newSiteLat').value=''; $('newSiteLng').value=''; $('newSiteRadius').value='100';
+    fillSelects(); renderAdminSites(); updateActionButtonLabel();
+    renderCalendar(); renderBookingList();
+  });
+
+  function renderAdminSites(){
+    const el = $('siteList');
+    if(!sites.length){ el.innerHTML = `<div class="empty-note">${t('villaEmpty')}</div>`; return; }
+    el.innerHTML = sites.map(s => `
+      <div class="list-item">
+        <div>
+          <div>${escapeHtml(s.name)}</div>
+          <div class="meta">${s.lat}, ${s.lng} · radius ${s.radius}m</div>
+        </div>
+        <button class="remove" data-id="${s.id}">${t('btnDelete')}</button>
+      </div>`).join('');
+    el.querySelectorAll('button.remove').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        await deleteSite(btn.dataset.id);
+        sites = sites.filter(s => s.id !== btn.dataset.id);
+        fillSelects(); renderAdminSites(); updateActionButtonLabel();
+      });
+    });
+  }
+
+  // Admin staff
+  $('addStaffBtn').addEventListener('click', async () => {
+    const name = $('newStaffName').value.trim();
+    const pin = $('newStaffPin').value.trim();
+    const msg = $('staffMsg');
+    if(!name){ msg.textContent = t('msgFillStaffName'); return; }
+    if(pin.length < 4){ msg.textContent = t('msgPinTooShortStaff'); return; }
+    msg.textContent = '';
+    const s = { id:'p'+Date.now(), name, pin };
+    staff.push(s);
+    await saveStaff(s);
+    $('newStaffName').value = '';
+    $('newStaffPin').value = '';
+    fillSelects(); renderAdminStaff(); updateActionButtonLabel();
+  });
+
+  function renderAdminStaff(){
+    const el = $('staffList');
+    if(!staff.length){ el.innerHTML = `<div class="empty-note">${t('staffEmpty')}</div>`; return; }
+    el.innerHTML = staff.map(s => `
+      <div class="list-item">
+        <div>${escapeHtml(s.name)}<div class="meta">${s.pin ? t('pinSetLabel') : t('pinNotSetLabel')}</div></div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <button class="remove" data-reset="${s.id}">${t('btnResetPin')}</button>
+          <button class="remove" data-id="${s.id}">${t('btnDelete')}</button>
+        </div>
+      </div>`).join('');
+    el.querySelectorAll('button[data-id]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        await deleteStaff(btn.dataset.id);
+        staff = staff.filter(s => s.id !== btn.dataset.id);
+        fillSelects(); renderAdminStaff(); updateActionButtonLabel();
+      });
+    });
+    el.querySelectorAll('button[data-reset]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const s = staff.find(x => x.id === btn.dataset.reset);
+        if(!s) return;
+        const panel = $('resetPinPanel');
+        panel.innerHTML = `
+          <div class="cal-detail-card" style="margin-bottom:14px;">
+            <p class="cal-detail-date">${tf('resetPinTitle', {name: escapeHtml(s.name)})}</p>
+            <input type="password" id="resetPinInput" placeholder="${t('phNewPin')}" maxlength="6" style="margin-bottom:10px;" />
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-in btn-small" id="resetPinSaveBtn" style="flex:1;">${t('btnSavePin')}</button>
+              <button class="btn btn-ghost btn-small" id="resetPinCancelBtn" style="flex:1;">${t('btnCancel')}</button>
+            </div>
+            <p class="pin-error" id="resetPinMsg"></p>
+          </div>`;
+        $('resetPinSaveBtn').addEventListener('click', async () => {
+          const val = $('resetPinInput').value.trim();
+          if(val.length < 4){ $('resetPinMsg').textContent = t('msgPinTooShort'); return; }
+          s.pin = val;
+          await updateStaff(s);
+          renderAdminStaff();
+          panel.innerHTML = '';
+        });
+        $('resetPinCancelBtn').addEventListener('click', () => { panel.innerHTML = ''; });
+      });
+    });
+  }
+
+  // Admin records
+  $('filterStaff').addEventListener('change', renderAdminRecords);
+  $('filterSite').addEventListener('change', renderAdminRecords);
+
+  function renderAdminRecords(){
+    const fStaff = $('filterStaff').value;
+    const fSite = $('filterSite').value;
+    let list = records.slice().sort((a,b)=> b.ts - a.ts);
+    if(fStaff) list = list.filter(r => r.staffId === fStaff);
+    if(fSite) list = list.filter(r => r.siteId === fSite);
+    list = list.slice(0, 100);
+
+    const el = $('recordsTable');
+    if(!list.length){ el.innerHTML = `<div class="empty-note">${t('recordsEmpty')}</div>`; return; }
+    el.innerHTML = list.map(r => {
+      const s = staff.find(x => x.id === r.staffId);
+      const site = sites.find(x => x.id === r.siteId);
+      const d = new Date(r.ts);
+      const tagClass = r.type === 'in' ? 'tag-in' : 'tag-out';
+      let thumb = '';
+      if(r.photo_path){
+        try{
+          const { data } = sb.storage.from('selfie-absensi').getPublicUrl(r.photo_path);
+          thumb = `<img src="${data.publicUrl}" class="thumb" />`;
+        }catch(e){}
+      }
+      return `<div class="hist-row">
+        <span>${thumb}${s?escapeHtml(s.name):'?'} — ${site?escapeHtml(site.name):'?'}<br>
+        <span style="color:rgba(32,34,30,0.45);font-size:12px;">${d.toLocaleString(t('locale'),{dateStyle:'medium',timeStyle:'short'})} · ${r.distance}m</span></span>
+        <span class="tag ${tagClass}">${r.type==='in'?t('tagIn'):t('tagOut')}</span>
+      </div>`;
+    }).join('');
+  }
+
+  $('exportBtn').addEventListener('click', () => {
+    const rows = [t('csvHeaders')];
+    records.slice().sort((a,b)=>a.ts-b.ts).forEach(r => {
+      const s = staff.find(x => x.id === r.staffId);
+      const site = sites.find(x => x.id === r.siteId);
+      rows.push([
+        s?s.name:'?', site?site.name:'?',
+        r.type==='in'?t('csvIn'):t('csvOut'),
+        new Date(r.ts).toLocaleString(t('locale')),
+        r.distance
+      ]);
+    });
+    const csv = rows.map(row => row.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'absensi-atlas-property.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  $('clearRecordsBtn').addEventListener('click', () => {
+    if(!records.length){ return; }
+    const panel = $('clearConfirmPanel');
+    panel.innerHTML = `
+      <div class="cal-detail-card" style="margin-top:12px;">
+        <p style="font-weight:600;margin:0 0 10px;">${t('clearConfirmMsg')}</p>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-in btn-small" id="clearConfirmYes" style="flex:1;background:var(--clay);color:var(--sand);">${t('btnClearYes')}</button>
+          <button class="btn btn-ghost btn-small" id="clearConfirmNo" style="flex:1;">${t('btnCancel')}</button>
+        </div>
+      </div>`;
+    $('clearConfirmYes').addEventListener('click', async () => {
+      await deleteAllRecords();
+      records = [];
+      renderAdminRecords();
+      renderHistory();
+      panel.innerHTML = '';
+    });
+    $('clearConfirmNo').addEventListener('click', () => { panel.innerHTML = ''; });
+  });
+
+  function renderAdminAll(){
+    renderAdminSites();
+    renderAdminStaff();
+    renderAdminRecords();
+    renderCalendar();
+    renderBookingList();
+  }
+
+  // INIT
+  (async function init(){
+    await loadAll();
+    const savedLang = localStorage.getItem('atlas-lang');
+    if(savedLang && (savedLang === 'id' || savedLang === 'en')){
+      currentLang = savedLang;
+    }
+    fillSelects();
+    renderHistory();
+    updateActionButtonLabel();
+    renderGuestCard();
+    renderStaffCalendar();
+    applyLanguage();
+
+    const gss = $('guestSiteSelect');
+    if(gss){
+      gss.addEventListener('change', () => { renderCalendar(); renderBookingList(); });
+      if(sites.length){ renderCalendar(); renderBookingList(); }
+    }
+  })();
+})();
+</script>
+</body>
+</html>

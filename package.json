@@ -1,0 +1,14 @@
+{
+  "name": "atlas-absensi",
+  "version": "1.0.0",
+  "description": "Atlas Property - Staff Attendance System dengan Supabase",
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 5173",
+    "build": "echo 'No build step needed'",
+    "start": "python3 -m http.server 3000"
+  },
+  "keywords": ["atlas", "absensi", "attendance", "supabase"],
+  "author": "Atlas Property",
+  "license": "MIT"
+}
