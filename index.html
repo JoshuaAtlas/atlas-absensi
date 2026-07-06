@@ -733,8 +733,8 @@
   // ============================================
   // SUPABASE INITIALIZATION
   // ============================================
-  const SUPABASE_URL = import.meta.env?.VITE_SUPABASE_URL || 'https://ruliwiyfgqxkwuukl.supabase.co';
-  const SUPABASE_ANON_KEY = import.meta.env?.VITE_SUPABASE_ANON_KEY || 'sb_publishable_PxmWwYVnHNiz1RIyW4onZw_GwPnRjpy';
+  const SUPABASE_URL = 'https://ruliwiyfgqxkwuukl.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_PxmWwYVnHNiz1RIyW4onZw_GwPnRjpy';
   
   // Wait for Supabase library to load
   while (!window.supabase) { await new Promise(r => setTimeout(r, 100)); }
